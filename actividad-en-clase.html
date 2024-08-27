@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejemplo con Materialize CSS</title>
+    <!-- Importar Materialize CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="input-field col s12">
+                <input id="entrada" type="text" class="validate">
+                <label for="entrada">Ingresa numero</label>
+            </div>
+            <div class="col s12">
+                <button id="boton" class="btn waves-effect waves-light" onclick="clickearBoton()">Hazme Click!</button>
+                <button id="boton-limpiar" class="btn red waves-effect waves-light" onclick="limpiar()">Limpiar</button>
+            </div>
+            <div class="col s12">
+                <div id="resultado" class="card-panel teal lighten-2 white-text"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Importar Materialize JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <script>
+        let mensajesRandom = [
+            ", Te gane po compadre",
+            ", Que sucede Mendez",
+            ", Asi no mas po",
+            ", te gané"
+        ];
+        let entrada = document.getElementById('entrada');
+        let boton = document.getElementById('boton');
+        let resultado = document.getElementById('resultado');
+
+        let nombre = entrada.value;
+
+        entrada.addEventListener('input', function() {
+            if (esNumerico(entrada.value)) {
+                console.log('El valor es numérico');
+            } else {
+                M.toast({html: 'Que paso? El valor no es numérico', classes: 'rounded red'});
+                entrada.value = entrada.value.slice(0, -1);
+            }
+        });
+
+        function clickearBoton() {
+            nombre = entrada.value;
+            let randomIndex = Math.floor(Math.random() * mensajesRandom.length);
+            resultado.innerText = `${nombre+1} ${mensajesRandom[randomIndex]}`;
+        }
+
+        function limpiar() {
+            entrada.value = '';
+            resultado.innerText = '';
+        }
+
+        function esNumerico(valor) {
+            return !isNaN(valor) && valor.trim() !== '';
+        }
+    </script>
+
+</body>
+</html>

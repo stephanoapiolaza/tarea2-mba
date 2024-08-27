@@ -6,28 +6,50 @@ body {
     background-color: #f4f4f9;
     margin: 0;
     font-family: Arial, sans-serif;
+    background-image: url('bg.png'); /* Imagen de fondo */
+    background-size: cover;
+    background-position: center;
+}
+
+.start-screen {
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 50px;
+    border-radius: 10px;
+}
+
+.hidden {
+    display: none !important;
 }
 
 .game {
-    width: 320px;
-    height: 320px;
+    width: 640px;
+    height: 640px;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+}
+
+#score-board {
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
 }
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(8, 40px);
-    grid-template-rows: repeat(8, 40px);
+    grid-template-columns: repeat(8, 80px);
+    grid-template-rows: repeat(8, 80px);
     gap: 2px;
 }
 
 .candy {
-    width: 40px;
-    height: 40px;
+    width: 80px;
+    height: 80px;
     background-color: #FF6347;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
 }
 
@@ -41,4 +63,187 @@ body {
 
 .candy:nth-child(4n+3) {
     background-color: #32CD32;
+}
+
+#result-screen {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 2px solid #ccc;
+    padding: 20px;
+    text-align: center;
+    display: none;
+}
+
+/* Estilos para el contenedor de puntaje */
+.score-container {
+    text-align: center;
+    background-color: #4a7729; /* Verde profundo inspirado en la naturaleza */
+    padding: 20px;
+    border-radius: 15px;
+    border: 4px solid #634d3e; /* Marrón Mapuche */
+    width: 250px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    animation: bounce 1.5s infinite ease-in-out;
+}
+
+/* Animación de rebote */
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Estilo del título de puntaje */
+.score-title {
+    font-size: 30px;
+    color: #fff;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    background-image: linear-gradient(45deg, #ffd700, #ff4500);
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: pulse 2s infinite;
+}
+
+/* Estilo del número del puntaje */
+.score-number {
+    font-size: 50px;
+    color: #ffd700; /* Dorado */
+    font-weight: bold;
+    margin-top: 10px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    animation: grow 1s infinite ease-in-out;
+}
+
+/* Animación para hacer que el número crezca suavemente */
+@keyframes grow {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+/* Animación del texto principal */
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Botón inspirado en Mapuche */
+.mapuche-button {
+    background-color: #4a7729; /* Verde profundo, evocando la naturaleza */
+    color: #fff; /* Blanco para el texto */
+    padding: 15px 30px;
+    margin: 10px;
+    border: 3px solid #634d3e; /* Marrón Mapuche */
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* Efecto de "hover" con un brillo */
+.mapuche-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    height: 300%;
+    background-color: rgba(255, 255, 255, 0.2);
+    transition: all 0.6s ease;
+    border-radius: 50%;
+    z-index: -1;
+    transform: translate(-50%, -50%) scale(0.1);
+}
+
+.mapuche-button:hover::before {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Efecto al hacer hover sobre el botón */
+.mapuche-button:hover {
+    background-color: #7d4b1f; /* Marrón más claro, evocando la tierra */
+    color: #ffd700; /* Dorado */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Patrón geométrico en el fondo del botón */
+.mapuche-button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(45deg, transparent 50%, #ffd700 50%), 
+                      linear-gradient(135deg, transparent 50%, #ffd700 50%);
+    background-size: 10px 10px;
+    opacity: 0.2;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Animación sutil de desplazamiento */
+.mapuche-button:hover::after {
+    background-position: 10px 10px;
+}
+
+
+/* Pantalla de victoria */
+.victory-screen {
+    text-align: center;
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 20px;
+    border: 5px solid #4a7729; /* Verde profundo */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* Título de la victoria */
+.victory-title {
+    font-size: 36px;
+    color: #4a7729; /* Verde profundo */
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 0 #634d3e; /* Sombra marrón */
+    text-transform: uppercase;
+}
+
+/* Mensaje de la victoria */
+.victory-message {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+/* Estilo para el puntaje final */
+#final-score {
+    color: #d94c00; /* Naranja Mapuche */
+    font-weight: bold;
 }

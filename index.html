@@ -3,13 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Candy Crush Clone</title>
+    <title>Aukantün Gaming Sport</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="game">
+
+    <div class="victory-screen" id="start-screen">
+        <h1 class="victory-title">Aukantün</h1>
+        <p class="victory-message">Inspirado en la cultura mapuche, juego didactivo para realizar match entre 3 elementos o más, se gana al conseguir más de 100 puntos</p>
+        <button class="mapuche-button" id="start-button">Comenzar Partida</button>
+    </div>
+
+    <div class="game hidden">
+        <div class="score-container score-board">
+            <div class="score-title">Puntaje</div>
+            <div class="score-number" id="score">100</div>
+        </div>
         <div class="grid" id="grid"></div>
     </div>
+
+    <div class="victory-screen hidden" id="result-screen">
+        <h1 class="victory-title" id="result-message">¡Wewnien!</h1>
+        <p class="victory-message">Tu puntaje fue: <span id="final-score">0</span> ¡Genial, sigue así!</p>
+        <button class="mapuche-button"  id="restart-button">Reiniciar Juego</button>
+    </div>
+
     <script src="scripts.js"></script>
 </body>
 </html>

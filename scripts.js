@@ -1,137 +1,185 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const grid = document.querySelector('#grid')
-    const width = 8
-    const squares = []
-    const candyColors = [
-        'red',
-        'yellow',
-        'blue',
-        'green'
-    ]
+    const grid = document.querySelector('#grid');
+    const scoreDisplay = document.querySelector('#score');
+    const resultScreen = document.querySelector('#result-screen');
+    const resultMessage = document.querySelector('#result-message');
+    const finalScore = document.querySelector('#final-score');
+    const restartButton = document.querySelector('#restart-button');
+    const startScreen = document.querySelector('#start-screen');
+    const startButton = document.querySelector('#start-button');
+    const gameContainer = document.querySelector('.game');
+    const width = 8;
+    const squares = [];
+    const candyImages = [
+        '1.png',
+        '2.png',
+        '3.png',
+        '4.png'
+    ];
+    let score = 0;
+    let gameIsStart = false;
 
-    // Create Board
+    // Mostrar el puntaje inicial en el marcador
+    scoreDisplay.textContent = score;
+
     function createBoard() {
         for (let i = 0; i < width * width; i++) {
-            const square = document.createElement('div')
-            let randomColor = Math.floor(Math.random() * candyColors.length)
-            square.style.backgroundColor = candyColors[randomColor]
-            square.setAttribute('draggable', true)
-            square.setAttribute('id', i)
-            grid.appendChild(square)
-            squares.push(square)
+            const square = document.createElement('div');
+            let randomImage = Math.floor(Math.random() * candyImages.length);
+            square.style.backgroundImage = `url(${candyImages[randomImage]})`;
+            square.style.backgroundSize = 'cover';
+            square.style.backgroundPosition = 'center';
+            square.setAttribute('draggable', true);
+            square.setAttribute('id', i);
+            grid.appendChild(square);
+            squares.push(square);
         }
     }
-    createBoard()
+    createBoard();
 
-    let colorBeingDragged
-    let colorBeingReplaced
-    let squareIdBeingDragged
-    let squareIdBeingReplaced
+    function startGame() {
+        startScreen.classList.add('hidden');
+        gameContainer.classList.remove('hidden');
+        gameIsStart = true;
+    }
 
-    squares.forEach(square => square.addEventListener('dragstart', dragStart))
-    squares.forEach(square => square.addEventListener('dragend', dragEnd))
-    squares.forEach(square => square.addEventListener('dragover', dragOver))
-    squares.forEach(square => square.addEventListener('dragenter', dragEnter))
-    squares.forEach(square => square.addEventListener('dragleave', dragLeave))
-    squares.forEach(square => square.addEventListener('drop', dragDrop))
+    startButton.addEventListener('click', startGame);
+
+    let imageBeingDragged;
+    let imageBeingReplaced;
+    let squareIdBeingDragged;
+    let squareIdBeingReplaced;
+
+    squares.forEach(square => square.addEventListener('dragstart', dragStart));
+    squares.forEach(square => square.addEventListener('dragend', dragEnd));
+    squares.forEach(square => square.addEventListener('dragover', dragOver));
+    squares.forEach(square => square.addEventListener('dragenter', dragEnter));
+    squares.forEach(square => square.addEventListener('dragleave', dragLeave));
+    squares.forEach(square => square.addEventListener('drop', dragDrop));
 
     function dragStart() {
-        colorBeingDragged = this.style.backgroundColor
-        squareIdBeingDragged = parseInt(this.id)
-        console.log(colorBeingDragged)
-        console.log(this.id, 'dragstart')
+        imageBeingDragged = this.style.backgroundImage;
+        squareIdBeingDragged = parseInt(this.id);
     }
 
     function dragOver(e) {
-        e.preventDefault()
-        console.log(this.id, 'dragover')
+        e.preventDefault();
     }
 
     function dragEnter(e) {
-        e.preventDefault()
-        console.log(this.id, 'dragenter')
+        e.preventDefault();
     }
 
-    function dragLeave() {
-        console.log(this.id, 'dragleave')
-    }
+    function dragLeave() {}
 
     function dragDrop() {
-        console.log(this.id, 'dragdrop')
-        colorBeingReplaced = this.style.backgroundColor
-        squareIdBeingReplaced = parseInt(this.id)
-        this.style.backgroundColor = colorBeingDragged
-        squares[squareIdBeingDragged].style.backgroundColor = colorBeingReplaced
+        imageBeingReplaced = this.style.backgroundImage;
+        squareIdBeingReplaced = parseInt(this.id);
+        this.style.backgroundImage = imageBeingDragged;
+        squares[squareIdBeingDragged].style.backgroundImage = imageBeingReplaced;
     }
 
     function dragEnd() {
-        console.log(this.id, 'dragend')
         let validMoves = [
             squareIdBeingDragged - 1,
             squareIdBeingDragged - width,
             squareIdBeingDragged + 1,
             squareIdBeingDragged + width
-        ]
-        let validMove = validMoves.includes(squareIdBeingReplaced)
+        ];
+        let validMove = validMoves.includes(squareIdBeingReplaced);
 
         if (squareIdBeingReplaced && validMove) {
-            squareIdBeingReplaced = null
+            squareIdBeingReplaced = null;
         } else if (squareIdBeingReplaced && !validMove) {
-            squares[squareIdBeingReplaced].style.backgroundColor = colorBeingReplaced
-            squares[squareIdBeingDragged].style.backgroundColor = colorBeingDragged
-        } else squares[squareIdBeingDragged].style.backgroundColor = colorBeingDragged
+            squares[squareIdBeingReplaced].style.backgroundImage = imageBeingReplaced;
+            squares[squareIdBeingDragged].style.backgroundImage = imageBeingDragged;
+        } else {
+            squares[squareIdBeingDragged].style.backgroundImage = imageBeingDragged;
+        }
     }
 
-    // Drop candies once some have been cleared
     function moveDown() {
-        for (i = 0; i < 55; i ++) {
-            if(squares[i + width].style.backgroundColor === '') {
-                squares[i + width].style.backgroundColor = squares[i].style.backgroundColor
-                squares[i].style.backgroundColor = ''
-                const firstRow = [0, 1, 2, 3, 4, 5, 6, 7]
-                const isFirstRow = firstRow.includes(i)
-                if (isFirstRow && (squares[i].style.backgroundColor === '')) {
-                  let randomColor = Math.floor(Math.random() * candyColors.length)
-                  squares[i].style.backgroundColor = candyColors[randomColor]
+        for (i = 0; i < 55; i++) {
+            if (squares[i + width].style.backgroundImage === '') {
+                squares[i + width].style.backgroundImage = squares[i].style.backgroundImage;
+                squares[i].style.backgroundImage = '';
+                const firstRow = [0, 1, 2, 3, 4, 5, 6, 7];
+                const isFirstRow = firstRow.includes(i);
+                if (isFirstRow && (squares[i].style.backgroundImage === '')) {
+                    let randomImage = Math.floor(Math.random() * candyImages.length);
+                    squares[i].style.backgroundImage = `url(${candyImages[randomImage]})`;
                 }
             }
         }
     }
 
-    // Check for matches
     function checkRowForThree() {
-        for (i = 0; i < 61; i ++) {
-            let rowOfThree = [i, i+1, i+2]
-            let decidedColor = squares[i].style.backgroundColor
-            const isBlank = squares[i].style.backgroundColor === ''
+        for (i = 0; i < 61; i++) {
+            let rowOfThree = [i, i + 1, i + 2];
+            let decidedImage = squares[i].style.backgroundImage;
+            const isBlank = squares[i].style.backgroundImage === '';
 
-            if(rowOfThree.every(index => squares[index].style.backgroundColor === decidedColor && !isBlank)) {
+            if (rowOfThree.every(index => squares[index].style.backgroundImage === decidedImage && !isBlank)) {
+                if (gameIsStart) {
+                    score += 10;
+                }
+                scoreDisplay.textContent = score;
                 rowOfThree.forEach(index => {
-                squares[index].style.backgroundColor = ''
-                })
+                    squares[index].style.backgroundImage = '';
+                });
+                if (gameIsStart && score >= 100) {
+                    gameWon();
+                }
             }
         }
     }
-    checkRowForThree()
 
     function checkColumnForThree() {
-        for (i = 0; i < 47; i ++) {
-            let columnOfThree = [i, i+width, i+width*2]
-            let decidedColor = squares[i].style.backgroundColor
-            const isBlank = squares[i].style.backgroundColor === ''
+        for (i = 0; i < 47; i++) {
+            let columnOfThree = [i, i + width, i + width * 2];
+            let decidedImage = squares[i].style.backgroundImage;
+            const isBlank = squares[i].style.backgroundImage === '';
 
-            if(columnOfThree.every(index => squares[index].style.backgroundColor === decidedColor && !isBlank)) {
+            if (columnOfThree.every(index => squares[index].style.backgroundImage === decidedImage && !isBlank)) {
+                if (gameIsStart) {
+                    score += 10;
+                }
+                scoreDisplay.textContent = score;
                 columnOfThree.forEach(index => {
-                squares[index].style.backgroundColor = ''
-                })
+                    squares[index].style.backgroundImage = '';
+                });
+                if (gameIsStart && score >= 100) {
+                    gameWon();
+                }
             }
         }
     }
-    checkColumnForThree()
 
-    window.setInterval(function(){
-        moveDown()
-        checkRowForThree()
-        checkColumnForThree()
-    }, 100)
-})
+    function gameWon() {
+        resultMessage.textContent = '!Wewnien!';
+        finalScore.textContent = score;
+        resultScreen.style.display = 'block';
+        resultScreen.classList.remove('hidden');
+    }
+
+    function resetGame() {
+        score = 0;
+        gameIsStart = false;
+        scoreDisplay.textContent = score;
+        resultScreen.style.display = 'none';
+        squares.forEach(square => {
+            let randomImage = Math.floor(Math.random() * candyImages.length);
+            square.style.backgroundImage = `url(${candyImages[randomImage]})`;
+        });
+        gameIsStart = true;
+    }
+
+    restartButton.addEventListener('click', resetGame);
+
+    window.setInterval(function () {
+        moveDown();
+        checkRowForThree();
+        checkColumnForThree();
+    }, 100);
+
+});
